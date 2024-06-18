@@ -1,1 +1,1 @@
-Link: https://faizktg.github.io/MyCash/
+Link: https://faizktg.github.io/LogMoney/
