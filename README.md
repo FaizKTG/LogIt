@@ -1,1 +1,1 @@
-Link: https://faizktg.github.io/LogMoney/
+Link: [https://faizktg.github.io/LogIt/]
