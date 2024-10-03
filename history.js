@@ -9,42 +9,54 @@ function newHistory() {
 
     let debtorVal = document.getElementById('debtorVal').value;
     let debtVal = document.getElementById("debtVal").value;
+    let reasonVal = document.getElementById("reasonVal").value;
     const currentDate = new Date().toString();
     const formattedDate = currentDate.substring(4, 15);
             
     console.log("Debt info: ", debtorVal, " took ", debtVal);
+    console.log("Reason: ", reasonVal);
     console.log("Current date: ", formattedDate);
     console.log("Saving History: InhandMoney = ", inhandMoney, " AccountMoney = ", accountMoney, " totalMoney = ", totalMoney);
 
-
+    // standardizes inputs
     if (debtorVal == "" || debtVal == "") {
         debtorVal = "N/A";
         debtVal = 0;
+    } 
+    if (reasonVal == "") {
+        reasonVal = "N/A";
     }
 
-    const rowData = [formattedDate, inhandMoney, accountMoney, totalMoney, 'Uncalculated', debtVal, debtorVal];
+    const rowData = [formattedDate, inhandMoney, accountMoney, totalMoney, 'Uncalculated', reasonVal, debtVal, debtorVal];
     addRow(rowData);
 
-    var newData = [formattedDate, "LMAOOOOOOOO", accountMoney, totalMoney, 'Uncalculated', debtVal, debtorVal];
+    saveHistory();
+
+    // tests
+    var newData = [formattedDate, "LMAOOOOOOOO", accountMoney, totalMoney, 'Uncalculated', reasonVal, debtVal, debtorVal];
     updateRow(newData, 0);
-
-
+    
+    const tbody = document.querySelector('.HistoryTableBody');
+    const row = tbody.rows[1];
+    console.log("ROWWWW:", row);
 }
 
-function changeModeHistory() {
-    if (inhandMode.checked) {
-        updateMoneyRow(inhandMoney);
-    }
-    else if (accountMode.checked) {
-        updateMoneyRow(accountMoney);
-    }
-    else if (totalMode.checked) {
-        updateMoneyRow(totalMoney);
-    }
-    else {
-        alert("HistoryMode Change Error!");
-    }
+// Saves current history into local storage
+function saveHistory() {
+    const historyTableBody = document.querySelector('.HistoryTableBody').innerHTML;
+    localStorage.setItem('historyTable', historyTableBody);
+    console.log("History content saved as: ", localStorage.getItem('historyTable'));
 }
+// Loads former history content once webpage loads if it exists
+document.addEventListener('DOMContentLoaded', function(event) {
+    if (localStorage.getItem('historyTable')) {
+        console.log("Former history content loaded successfully");
+        let historyTableBody = document.querySelector('.HistoryTableBody');
+        historyTableBody.innerHTML = localStorage.getItem('historyTable');
+    }
+});
+
+// Removed changeModeHistory(), make sure to remove its elements
 
 function addRow(data) {
     const historyTableBody = document.querySelector('.HistoryTableBody');
@@ -56,9 +68,10 @@ function addRow(data) {
         newRow.appendChild(cell);
     });
 
-    historyTableBody.appendChild(newRow);
+    historyTableBody.prepend(newRow);
 }
 
+// NOT WITHIN FUNCTION
 function updateRow(rowIndex, newData) {
     const tbody = document.querySelector('.HistoryTableBody');
     const row = tbody.rows[rowIndex];
@@ -84,4 +97,9 @@ function deleteRow(rowIndex) {
     } else {
         console.log('Row index out of bounds');
     }
+}
+
+// Lazily put standardization tests
+function checkStandard(debtorVal, debtVal, reasonVal) {
+    
 }

@@ -78,6 +78,7 @@
                 <th scope="col">Account</th>
                 <th scope="col">Total</th>
                 <th scope="col">Change</th>
+                <th scope = "col">Reason</th>
                 <th scope="col">Debt</th>
                 <th scope = "col">Debtor</th>
               </tr>
@@ -86,21 +87,6 @@
               
             </tbody>
           </table>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="btn-group HistoryModes" role="group" aria-label="Basic radio toggle button group">
-            <input onclick = "changeModeHistory()" type="radio" class="btn-check" name="btnradio2" id="inhandHistory" autocomplete="off" checked>
-            <label class="btn btn-outline-dark" for="inhandHistory">Inhand</label>
-            <input onclick = "changeModeHistory()" type="radio" class="btn-check" name="btnradio2" id="accountHistory" autocomplete="off">
-            <label class="btn btn-outline-dark" for="accountHistory">Account</label>
-            <input onclick = "changeModeHistory()" type="radio" class="btn-check" name="btnradio2" id="totalHistory" autocomplete="off">
-            <label class="btn btn-outline-dark" for="totalHistory">Total</label>
-          </div>
-          <button type="button" class="btn btn-dark me-2 HistorySave" data-bs-toggle="modal" data-bs-target="#historyModal">
-            Save
-          </button>
         </td>
       </tr>
     </table>
@@ -168,11 +154,13 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Is anyone in-debt to you? (Leave everything blank if not and submit)</p>
-          <label for="inputField"><p>Debt:</p></label>
-          <input type="text" id="debtVal" name="inputField" class="form-control">
-          <label for="inputField"><p>Debtor:</p></label>
+          <p>(!) If you want to add additional details fill the answers below or skip them</p>
+          <p>What's the reason for today's change?</p>
+          <input type = "text" id = "reasonVal" name = "inputField" class = "form-control">
+          <p>Is anyone in-debt to you?</p>
           <input type="text" id="debtorVal" name="inputField" class="form-control">
+          <p>How much debt?</p>
+          <input type="text" id="debtVal" name="inputField" class="form-control">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

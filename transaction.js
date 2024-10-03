@@ -2,6 +2,7 @@ var inhandMoney = 0;
 var accountMoney = 0;
 var totalMoney = 0;
 
+// Loads the saved content from localSorage upon loading the webpage if it exists
 document.addEventListener('DOMContentLoaded', function(event) {
     if(localStorage.getItem('inhandMoney')) {
         inhandMoney = parseInt(localStorage.getItem('inhandMoney'));
@@ -62,6 +63,7 @@ function changeMode() {
     }
 }
 
+// Main function for depositing, withdrawing, and saving the content into localstorage
 function DepositWithdraw () {
     let inputValue = document.getElementById("DepositWithdrawInput").value;
     if (inhandMode.checked) {
