@@ -87,3 +87,14 @@ body {
 .HistoryModes {
     margin-left: 50px
 }
+
+.HistoryChart {
+    display: flex;
+    justify-content: space-between;
+}
+.ChartContainer {
+    width: 600px;
+    height: 600px;
+    padding-top: 70px;
+    margin-right: 70px;
+}

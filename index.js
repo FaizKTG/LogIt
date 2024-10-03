@@ -6,3 +6,15 @@ input.addEventListener("keypress", function(event) {
         inputButton.click();
     }
 });
+
+
+function deleteAllSaves() {
+    if(window.confirm("Are you sure you wanted to delete every saved content?")) {
+        console.log("deleting saves...");
+        let savedContent = ['historyTable', 'histories', 'chartData', 'inhandMoney', 'accountMoney', 'totalMoney'];
+        savedContent.forEach((item) => {
+            localStorage.removeItem(item);
+        })
+        location.reload();
+    };
+}

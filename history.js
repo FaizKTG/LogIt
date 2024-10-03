@@ -41,13 +41,43 @@ function newHistory() {
     console.log("ROWWWW:", row);
 }
 
+let globalHistories; let index; // vars to be used in saveHistory() and loadNextHistory()
+
 // Saves current history into local storage
 function saveHistory() {
     const historyTableBody = document.querySelector('.HistoryTableBody').innerHTML;
-    localStorage.setItem('historyTable', historyTableBody);
-    console.log("History content saved as: ", localStorage.getItem('historyTable'));
+    let hTableRows = document.querySelector('.HistoryTableBody').rows;
+    console.log("History Table Rows: ",hTableRows);
+
+    if (hTableRows.length < 10) {
+        localStorage.setItem('historyTable', historyTableBody);
+        console.log("History content saved as: ", localStorage.getItem('historyTable'));
+    } else {
+        // If history is big enough (has 6 rows)
+        // Saves the current history into another localStorage for managing seperate histories sized 6
+        let histories;
+        if (!localStorage.getItem('histories')) {
+            histories = [];
+        } else {
+            histories = JSON.parse(localStorage.getItem('histories'));
+        }
+       histories.push(historyTableBody);
+       localStorage.setItem('histories', JSON.stringify(histories));
+
+       let historiesStoredARR = JSON.parse(localStorage.getItem('histories'));
+       console.log("Histories: ", historiesStoredARR);
+
+       localStorage.setItem('historyTable', '');
+       document.querySelector('.HistoryTableBody').innerHTML = '';
+       if (globalHistories) {
+         globalHistories = JSON.parse(localStorage.getItem('histories'));
+       }
+    }
+
+
+    updateChart();
 }
-// Loads former history content once webpage loads if it exists
+// Loads most recent history content once webpage loads if it exists
 document.addEventListener('DOMContentLoaded', function(event) {
     if (localStorage.getItem('historyTable')) {
         console.log("Former history content loaded successfully");
@@ -56,7 +86,39 @@ document.addEventListener('DOMContentLoaded', function(event) {
     }
 });
 
-// Removed changeModeHistory(), make sure to remove its elements
+// Loads the old histories that were saved once they reached 6 rows in total
+if (localStorage.getItem('histories')) {
+    globalHistories = JSON.parse(localStorage.getItem('histories'));
+    globalHistories.push(localStorage.getItem('historyTable'));
+    index = globalHistories.length - 1; 
+}
+function loadNextHistory() {
+    if (localStorage.getItem('histories')) {
+        if (index > 0) {
+            index--;
+        } else {
+            index = globalHistories.length - 1; 
+        }
+        let historyTableBody = document.querySelector('.HistoryTableBody');
+        historyTableBody.innerHTML = globalHistories[index];
+        console.log("loaded history of index ", index);
+        console.log("history data:", globalHistories[index]);
+    }
+}
+function loadPreviousHistory() {
+    if (localStorage.getItem('histories')) {
+        if (index < globalHistories.length - 1) {
+            index++;
+        } else {
+            index = globalHistories.length - 1; 
+        }
+        let historyTableBody = document.querySelector('.HistoryTableBody');
+        historyTableBody.innerHTML = globalHistories[index];
+        console.log("loaded history of index ", index);
+        console.log("history data:", globalHistories[index]);
+    }
+} // Both functions can obviously be improved
+
 
 function addRow(data) {
     const historyTableBody = document.querySelector('.HistoryTableBody');
@@ -99,7 +161,4 @@ function deleteRow(rowIndex) {
     }
 }
 
-// Lazily put standardization tests
-function checkStandard(debtorVal, debtVal, reasonVal) {
-    
-}
+
