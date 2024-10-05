@@ -38,7 +38,7 @@
             <button type="button" class="btn btn-outline-dark me-2" data-bs-toggle="modal" data-bs-target="#currencyModal">
               Currency
             </button>
-            <button type="button" class="btn btn-dark me-2" data-bs-toggle="modal" data-bs-target="#historyModal">
+            <button id = "saveToHistoryButton"type="button" class="btn btn-dark me-2" data-bs-toggle="modal" data-bs-target="#historyModal">
               Save to History
             </button>
           </div>
@@ -72,7 +72,7 @@
       <table class = "HistoryTable">
         <tr>
           <td>
-            <table class="table table-dark table-border table-striped-columns table-hover MainHistoryTable">
+            <table class="table table-dark table-border table-bordered  table-striped-columns table-hover MainHistoryTable">
               <thead>
                 <tr>
                   <th scope="col">Date</th>
@@ -202,8 +202,8 @@
   <script src = "index.js"></script>
   <script src = "transaction.js"></script>
   <script src = "balance.js"></script>
-  <script src = "history.js"></script>
   <script src = "chart.js"></script>
+  <script src = "history.js"></script>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

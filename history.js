@@ -12,6 +12,7 @@ function newHistory() {
     let reasonVal = document.getElementById("reasonVal").value;
     const currentDate = new Date().toString();
     const formattedDate = currentDate.substring(4, 15);
+    let change = calculateChange(totalMoney);
             
     console.log("Debt info: ", debtorVal, " took ", debtVal);
     console.log("Reason: ", reasonVal);
@@ -27,7 +28,8 @@ function newHistory() {
         reasonVal = "N/A";
     }
 
-    const rowData = [formattedDate, inhandMoney, accountMoney, totalMoney, 'Uncalculated', reasonVal, debtVal, debtorVal];
+
+    const rowData = [formattedDate, inhandMoney, accountMoney, totalMoney, change, reasonVal, debtVal, debtorVal];
     addRow(rowData);
 
     saveHistory();
@@ -49,32 +51,32 @@ function saveHistory() {
     let hTableRows = document.querySelector('.HistoryTableBody').rows;
     console.log("History Table Rows: ",hTableRows);
 
-    if (hTableRows.length < 10) {
-        localStorage.setItem('historyTable', historyTableBody);
-        console.log("History content saved as: ", localStorage.getItem('historyTable'));
-    } else {
+    localStorage.setItem('historyTable', historyTableBody);
+    console.log("History content saved as: ", localStorage.getItem('historyTable'));
+
+    if (hTableRows.length >= 6) {
         // If history is big enough (has 6 rows)
-        // Saves the current history into another localStorage for managing seperate histories sized 6
+        // Delete current history table and place its data into another save 
+        localStorage.setItem('historyTable', '');
+        document.querySelector('.HistoryTableBody').innerHTML = ''; 
         let histories;
         if (!localStorage.getItem('histories')) {
             histories = [];
         } else {
             histories = JSON.parse(localStorage.getItem('histories'));
         }
-       histories.push(historyTableBody);
-       localStorage.setItem('histories', JSON.stringify(histories));
+        histories.push(historyTableBody);
+        localStorage.setItem('histories', JSON.stringify(histories));
+        console.log("Histories: ", JSON.parse(localStorage.getItem('histories')));
 
-       let historiesStoredARR = JSON.parse(localStorage.getItem('histories'));
-       console.log("Histories: ", historiesStoredARR);
-
-       localStorage.setItem('historyTable', '');
-       document.querySelector('.HistoryTableBody').innerHTML = '';
-       if (globalHistories) {
-         globalHistories = JSON.parse(localStorage.getItem('histories'));
-       }
+       
+        if (globalHistories) {
+            globalHistories = JSON.parse(localStorage.getItem('histories'));
+        }
+        
     }
 
-
+    location.reload();
     updateChart();
 }
 // Loads most recent history content once webpage loads if it exists
@@ -94,28 +96,44 @@ if (localStorage.getItem('histories')) {
 }
 function loadNextHistory() {
     if (localStorage.getItem('histories')) {
+        const saveToHistoryButton = document.getElementById('saveToHistoryButton');
         if (index > 0) {
             index--;
+            saveToHistoryButton.disabled = true;
         } else {
             index = globalHistories.length - 1; 
+        }
+        if (index == globalHistories.length - 1) {
+            saveToHistoryButton.disabled = false; 
         }
         let historyTableBody = document.querySelector('.HistoryTableBody');
         historyTableBody.innerHTML = globalHistories[index];
         console.log("loaded history of index ", index);
         console.log("history data:", globalHistories[index]);
+
+        updateChart();
     }
 }
 function loadPreviousHistory() {
     if (localStorage.getItem('histories')) {
+        const saveToHistoryButton = document.getElementById('saveToHistoryButton');
         if (index < globalHistories.length - 1) {
             index++;
+            saveToHistoryButton.disabled = true;
         } else {
-            index = globalHistories.length - 1; 
+            index = 0;
+            saveToHistoryButton.disabled = true; 
         }
+        if (index == globalHistories.length - 1) {
+            saveToHistoryButton.disabled = false; 
+        }
+        console.log(saveToHistoryButton.disabled);
         let historyTableBody = document.querySelector('.HistoryTableBody');
         historyTableBody.innerHTML = globalHistories[index];
         console.log("loaded history of index ", index);
         console.log("history data:", globalHistories[index]);
+
+        updateChart();
     }
 } // Both functions can obviously be improved
 
@@ -124,13 +142,32 @@ function addRow(data) {
     const historyTableBody = document.querySelector('.HistoryTableBody');
 
     const newRow = document.createElement('tr');
+    let index = -1;
     data.forEach(item => {
+        index++;
         const cell = document.createElement('td');
         cell.textContent = item;
+        if (index > 4) {
+            cell.contentEditable = true;
+        }
         newRow.appendChild(cell);
     });
 
     historyTableBody.prepend(newRow);
+}
+
+
+function calculateChange(currentTotal) {
+    let historyTableBody = document.querySelector('.HistoryTableBody').innerHTML;
+    let hTableRows = document.querySelector('.HistoryTableBody').rows;
+    console.log("HTABLEROWS:", hTableRows);
+    if (hTableRows.length == 0) {
+        return 0;
+    }
+    let formerTotal = hTableRows[0].getElementsByTagName('td')[3].textContent;
+    console.log("GAINED FORMER TOTAL:", formerTotal);
+    let change = currentTotal - formerTotal;
+    return change;
 }
 
 // NOT WITHIN FUNCTION

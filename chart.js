@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     if (!mainData) {
         mainData = [0, 0, 0, 0, 0, 0];
     }
+    
     mainChart = new Chart(myChart, {
         type: 'line',
         data: {
